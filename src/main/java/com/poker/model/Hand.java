@@ -58,6 +58,16 @@ public final class Hand implements Comparable<Hand>{
         aHand.evalRank();
         return aHand;
     }
+	
+	/**
+	* Two helper maps are created ot help us with determing the value
+	* of the hand. 
+	* One map is per int value of the card and the other per suit.
+	**/
+	private void createMaps(List<Card> list) {
+        suitsMap = cards.stream().collect(Collectors.groupingBy(Card::getSuit));
+        valuesMap = cards.stream().collect(Collectors.groupingBy(Card::getIntValue));
+    }
     
     /**
      * Various checks to validate the hand
@@ -84,9 +94,8 @@ public final class Hand implements Comparable<Hand>{
     }
     
     /**
-     * Evaluates the hand, progressively
+     * Evaluates the hand
      * 
-     * @throws RuntimeException in case the evaluator is not working
      */
     private void evalRank(){
         if(isPair()){
@@ -115,7 +124,7 @@ public final class Hand implements Comparable<Hand>{
     
     /**
      * If the map per value consists of
-     * exactly 4 keys, then it is a Pair
+     * exactly 4 values, then it is a Pair
      * 
      * @return 
      */
@@ -139,7 +148,8 @@ public final class Hand implements Comparable<Hand>{
     
     /**
      * If the map per value
-     * has three values of one which has three cards
+     * has three values, one of which has a list of three cards
+	 * (meaning the other two have one card each)
      * then it is a Three of A Kind
      * @return 
      */
@@ -185,7 +195,8 @@ public final class Hand implements Comparable<Hand>{
     
     /**
      * If the map per values
-     * has one of list of three and one list of two cards
+     * has one of list of three cards and 
+	 * one list of two cards
      * then it is a Full House
      * @return 
      */
@@ -261,11 +272,6 @@ public final class Hand implements Comparable<Hand>{
         });
         sb.append("]");
         return sb.toString();
-    }
-
-    private void createMaps(List<Card> list) {
-        suitsMap = cards.stream().collect(Collectors.groupingBy(Card::getSuit));
-        valuesMap = cards.stream().collect(Collectors.groupingBy(Card::getIntValue));
     }
     
     private void setRanking(int ranking){
